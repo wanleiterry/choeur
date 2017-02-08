@@ -18,4 +18,5 @@ use Illuminate\Http\Request;
 // })->middleware('auth:api');
 
 //登录
+// Route::get('login', 'Auth\LoginController@getLogin');
 Route::get('login', 'Auth\LoginController@postLogin');

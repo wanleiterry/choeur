@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Redis;
 use App\Models\User;
 
 class LoginController extends Controller
@@ -49,14 +50,21 @@ class LoginController extends Controller
     public function postLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['result' => '邮箱或密码错误.']);
+        if (empty($credentials['email']) || empty($credentials['password'])) {
+            return response()->json(['result' => '邮箱或密码不能为空。']);
         }
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response()->json(['result' => '邮箱或密码错误。']);
+        }
+        // TODO: cookie记录登录的ip，如ip不同需重新登录
+        Redis::set('user:' . $credentials['email'] . ':ip', request()->ip());
         return response()->json(['result' => $token]);
     }
 
     public function getLogin()
     {
-        dd(User::get());
+        // dd(config('jwt.ttl'));
+        // dd(request()->ip());
+        // dd(User::get());
     }
 }

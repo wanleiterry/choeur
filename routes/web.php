@@ -16,5 +16,5 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'api', 'middleware' => ['jwt.auth']], function () {
-    Route::get('user/list', 'Auth\LoginController@getLogin');
+    Route::get('user/list', 'User\UserController@getUserList');
 });
