@@ -13,13 +13,19 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         DB::table('user')->insert([
-            'username' => 'admin',
-            'nickname' => '管理员',
-            'email' => 'admin@gmail.com',
-            'mobile' => '18566329824',
+            'role_id' => 1,
+            'username' => 'superadmin',
+            'nickname' => '超级管理员',
             'password' => bcrypt('secret'),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'avatar' => '头像地址',
+            'email' => 'superadmin@gmail.com',
+            'mobile' => '18768132743',
+            'qq' => 'QQ号',
+            'sex' => 0,
+            'address' => '住址',
+            'status' => 1,
+            'created_at' => Carbon::now()->timestamp,
+            'updated_at' => Carbon::now()->timestamp,
         ]);
     }
 }
