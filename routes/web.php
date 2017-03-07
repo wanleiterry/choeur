@@ -15,6 +15,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'api', 'middleware' => ['jwt.auth']], function () {
-    Route::get('user/list', 'User\UserController@getUserList');
+Route::group(['prefix' => 'api'], function () {
+    //登录相关
+    Route::post('login.json', 'Auth\LoginController@postLogin');
+
+    //用户相关
+    Route::group(['prefix' => 'user', 'middleware' => ['jwt.auth', 'jwt.refresh']], function () {
+        Route::get('list.json', 'User\UserController@getUserList');
+    });
+
+    //机房相关
+    Route::group(['prefix' => 'room', 'middleware' => ['jwt.auth', 'jwt.refresh']], function () {
+        Route::get('cluster.json', 'Room\ClusterController@getCluster');
+        Route::post('cluster.json', 'Room\ClusterController@createCluster');
+        Route::put('cluster/{clusterId}.json', 'Room\ClusterController@updateCluster');
+        Route::delete('cluster/{clusterId}.json', 'Room\ClusterController@deleteCluster');
+    });
 });

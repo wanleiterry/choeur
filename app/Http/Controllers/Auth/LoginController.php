@@ -46,10 +46,15 @@ class LoginController extends Controller
         $credentials['password'] = $params['password'];
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['status' => false, 'error' => '邮箱或密码错误。']);
-        }dd(12312321);
+        }
         // TODO: cookie记录登录的ip，如ip不同需重新登录
-        Redis::set('user:' . $credentials['email'] . ':ip', request()->ip());
-        return response()->json(['status' => true, 'data' => $token]);
+        Redis::set('user:' . $params['account'] . ':ip', request()->ip());
+
+        // send the refreshed token back to the client
+        // $response->headers->set('Authorization', 'Bearer ' . $newToken);
+        $jwtHeader = ['Authorization' => 'Bearer ' . $token];
+
+        return response()->json(['status' => true, 'data' => $token], 200, $jwtHeader);
     }
 
 }

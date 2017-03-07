@@ -7,7 +7,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Redis;
 use Exception;
 
-class AuthJWT
+class JwtAuthFromToken
 {
     /**
      * Handle an incoming request.
@@ -19,24 +19,24 @@ class AuthJWT
     public function handle($request, Closure $next)
     {
         try {
-            $token = $request->get('token');
+            $token = JWTAuth::setRequest($request)->getToken();
             if (empty($token)) {
-                return response()->json(['error' => 'Token不能为空']);
+                return response()->json(['status' => false, 'error' => 'Token不能为空']);
             }
             // 如果用户登陆后的所有请求没有jwt的token抛出异常
-            // 后续完善，不同服务器用token需重新登录，以防token被盗
             $user = JWTAuth::toUser($token);
-            if (Redis::get('user:' . $user['email'] . ':ip') != $request->ip()) {
+            if (Redis::get('user:' . $user['email'] . ':ip') != $request->ip() &&
+                Redis::get('user:' . $user['mobile'] . ':ip') != $request->ip()) {
                 JWTAuth::invalidate($token);
-                return response()->json(['error' => '请重新登录']);
+                return response()->json(['status' => false, 'error' => '请重新登录']);
             }
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return response()->json(['error' => 'Token无效']);
+                return response()->json(['status' => false, 'error' => 'Token无效']);
             } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return response()->json(['error' => 'Token已过期']);
+                return response()->json(['status' => false, 'error' => 'Token已过期']);
             } else {
-                return response()->json(['error' => '出错了']);
+                return response()->json(['status' => false, 'error' => '出错了']);
             }
         }
 

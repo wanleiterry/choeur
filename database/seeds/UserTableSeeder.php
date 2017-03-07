@@ -23,7 +23,10 @@ class UserTableSeeder extends Seeder
             'qq' => 'QQ号',
             'sex' => 0,
             'address' => '住址',
-            'status' => 1,
+            'status' => 2,
+            'is_deleted' => 0,
+            'created_by' => 1,
+            'updated_by' => 0,
             'created_at' => Carbon::now()->timestamp,
             'updated_at' => Carbon::now()->timestamp,
         ]);

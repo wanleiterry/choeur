@@ -19,4 +19,4 @@ use Illuminate\Http\Request;
 
 //登录
 // Route::get('login', 'Auth\LoginController@getLogin');
-Route::get('login', 'Auth\LoginController@postLogin');
+// Route::post('login', 'Auth\LoginController@postLogin');
