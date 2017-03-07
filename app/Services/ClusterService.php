@@ -16,7 +16,9 @@ class ClusterService extends BaseService
     {
         $data = [];
 
-        $cluster = Cluster::where(['parent_id' => 0])->first();
+        $cluster = Cluster::select('id', 'name', 'ip', 'city', 'county', 'district')
+            ->where(['parent_id' => 0])
+            ->first();
         if ($cluster == false) {
             $data['data'] = [];
         } else {

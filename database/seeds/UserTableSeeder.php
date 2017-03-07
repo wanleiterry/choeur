@@ -24,11 +24,10 @@ class UserTableSeeder extends Seeder
             'sex' => 0,
             'address' => '住址',
             'status' => 2,
-            'is_deleted' => 0,
             'created_by' => 1,
             'updated_by' => 0,
-            'created_at' => Carbon::now()->timestamp,
-            'updated_at' => Carbon::now()->timestamp,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
     }
 }
