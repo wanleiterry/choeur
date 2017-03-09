@@ -25,10 +25,17 @@ Route::group(['prefix' => 'api'], function () {
     });
 
     //机房相关
-    Route::group(['prefix' => 'room', 'middleware' => ['jwt.auth', 'jwt.refresh']], function () {
+//    Route::group(['prefix' => 'room', 'middleware' => ['jwt.auth', 'jwt.refresh']], function () {
+    Route::group(['prefix' => 'room', 'middleware' => ['jwt.auth']], function () {
+        //中心
         Route::get('cluster.json', 'Room\ClusterController@getCluster');
         Route::post('cluster.json', 'Room\ClusterController@createCluster');
-        Route::put('cluster/{clusterId}.json', 'Room\ClusterController@updateCluster');
-        Route::delete('cluster/{clusterId}.json', 'Room\ClusterController@deleteCluster');
+        Route::put('cluster/{clusterId}.json', 'Room\ClusterController@updateCluster')->where('clusterId', '[0-9]+');
+        Route::delete('cluster/{clusterId}.json', 'Room\ClusterController@deleteCluster')->where('clusterId', '[0-9]+');
+
+        //网点
+        Route::get('cluster/dot/{clusterId}.json', 'Room\DotController@getDotList')->where('clusterId', '[0-9]+');
+        Route::get('dot/{dotId}.json', 'Room\DotController@getDot')->where('dotId', '[0-9]+');
+        Route::post('dot.json', 'Room\DotController@createDot');
     });
 });

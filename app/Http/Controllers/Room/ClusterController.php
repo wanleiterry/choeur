@@ -13,14 +13,23 @@ class ClusterController extends Controller
         $this->clusterService = $clusterService;
     }
 
-    //获取中心，只有一个中心
+    /**
+     * 获取中心，只有一个中心
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getCluster()
     {
         $data = $this->clusterService->getCluster();
         return response()->json(['status' => true, 'data' => $data['data']]);
     }
 
-    //创建中心
+    /**
+     * 创建中心
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function createCluster(Request $request)
     {
         $data = $this->clusterService->createCluster($request->all());
@@ -32,6 +41,13 @@ class ClusterController extends Controller
         }
     }
 
+    /**
+     * 更新中心
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateCluster($id, Request $request)
     {
         $data = $this->clusterService->updateCluster($id, $request->all());
@@ -43,6 +59,12 @@ class ClusterController extends Controller
         }
     }
 
+    /**
+     * 删除中心
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteCluster($id)
     {
         $data = $this->clusterService->deleteCluster($id);
@@ -52,11 +74,5 @@ class ClusterController extends Controller
         } else {
             return response()->json(['status' => false, 'error' => $data['error']]);
         }
-    }
-    
-    //创建网点
-    public function createNetPoint(Request $request)
-    {
-        # code...
     }
 }
