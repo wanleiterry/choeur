@@ -142,11 +142,9 @@ class ClusterService extends BaseService
             return ['status' => false, 'error' => '参数错误'];
 
         //只能有一个中心，判断中心是否已存在
-        $cluster = Cluster::where(['id' => $id, 'parent_id' => 0])->first();
-        if ($cluster == false)
+        $clusterId = Cluster::where(['id' => $id, 'parent_id' => 0])->value('id');
+        if ($clusterId == false || $clusterId != $id)
             return ['status' => false, 'error' => '中心不存在'];
-
-        $cluster = $cluster->toArray();
 
         //判断中心下面是否有网点
         if (Cluster::where(['parent_id' => $id])->value('id') != false)

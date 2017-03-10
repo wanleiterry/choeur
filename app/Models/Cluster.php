@@ -23,6 +23,6 @@ class Cluster extends BaseModel
 
     public function cluster()
     {
-        return $this->hasOne(get_class($this), 'id', 'parent_id');
+        return $this->belongsTo(get_class($this), 'parent_id', 'id');
     }
 }

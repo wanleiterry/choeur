@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cluster;
+use App\Models\Cabinet;
 
 class DotService extends BaseService
 {
@@ -147,83 +148,92 @@ class DotService extends BaseService
         }
     }
 
-//    /**
-//     * 更新中心
-//     *
-//     * @param $id
-//     * @param array $params
-//     * @return array
-//     */
-//    public function updateCluster($id, array $params)
-//    {
-//        if (intval($id) <= 0)
-//            return ['status' => false, 'error' => '参数错误'];
-//
-//        if (isset($params['ip']) && chkIpV4($params['ip']) == false)
-//            return ['status' => false, 'error' => '参数错误'];
-//
-//        //只能有一个中心，判断中心是否已存在
-//        $cluster = Cluster::where(['id' => $id, 'parent_id' => 0])->first();
-//        if ($cluster == false)
-//            return ['status' => false, 'error' => '中心不存在'];
-//
-//        $cluster = $cluster->toArray();
-//
-//        //参数整理
-//        $user = $this->getAuthUser();
-//        if ($user == false)
-//            return ['status' => false, 'error' => 'token失效'];
-//        $updData = [
-//            'parent_id' => 0,
-//            'name' => isset($params['name']) && ! empty($params['name']) ? $params['name'] : $cluster['name'],
-//            'ip' => isset($params['ip']) ? ip2long($params['ip']) : $cluster['ip'],
-//            'city' => isset($params['city']) && ! empty($params['city']) ? $params['city'] : $cluster['city'],
-//            'county' => isset($params['county']) && ! empty($params['county']) ? $params['county'] : $cluster['county'],
-//            'district' => isset($params['district']) && ! empty($params['district']) ? $params['district'] : $cluster['district'],
-//            'updated_by' => $user['id'],
-//        ];
-//
-//        if ($this->cluster->validate($updData) !== false) {
-//            $result = Cluster::where('id', $id)->update($updData);
-//            if ($result !== false) {
-//                $data['data'] = $id;
-//                return ['status' => true, 'data' => $data];
-//            } else {
-//                return ['status' => false, 'error' => '中心更新失败'];
-//            }
-//        } else {
-//            return ['status' => false, 'error' => $this->cluster->getErrors()];
-//        }
-//    }
-//
-//    /**
-//     * 删除中心
-//     *
-//     * @param $id
-//     * @return array
-//     */
-//    public function deleteCluster($id)
-//    {
-//        if (intval($id) <= 0)
-//            return ['status' => false, 'error' => '参数错误'];
-//
-//        //只能有一个中心，判断中心是否已存在
-//        $cluster = Cluster::where(['id' => $id, 'parent_id' => 0])->first();
-//        if ($cluster == false)
-//            return ['status' => false, 'error' => '中心不存在'];
-//
-//        $cluster = $cluster->toArray();
-//
-//        //判断中心下面是否有网点
-//        if (Cluster::where(['parent_id' => $id])->value('id') != false)
-//            return ['status' => false, 'error' => '中心下有网点'];
-//
-//        $result = Cluster::where('id', $id)->delete();
-//        if ($result !== false) {
-//            $data['data'] = '中心删除成功';
-//            return ['status' => true, 'data' => $data];
-//        } else {
-//            return ['status' => false, 'error' => '中心删除失败'];
-//        }
-//    }
+    /**
+     * 更新中心
+     *
+     * @param $id
+     * @param array $params
+     * @return array
+     */
+    public function updateDot($id, array $params)
+    {
+        if (intval($id) <= 0)
+            return ['status' => false, 'error' => '参数错误'];
+
+        if (isset($params['ip']) && chkIpV4($params['ip']) == false)
+            return ['status' => false, 'error' => '参数错误'];
+
+        //判断中心是否存在
+        if (isset($params['parent_id']) && Cluster::where(['id' => $params['parent_id'], 'parent_id' => 0]))
+            return ['status' => false, 'error' => '中心不存在'];
+
+        //判断网点是否存在
+        $dot = Cluster::where(['id' => $id])->first();
+        if ($dot == false)
+            return ['status' => false, 'error' => '网点不存在'];
+
+        $dot = $dot->toArray();
+
+        //判断是否重名
+        if (isset($params['name']) && $params['name'] != $dot['name']) {
+            if (Cluster::where('name', $params['name'])->value('id') != false)
+                return ['status' => false, 'error' => '网点名已存在'];
+        }
+
+        //参数整理
+        $user = $this->getAuthUser();
+        if ($user == false)
+            return ['status' => false, 'error' => 'token失效'];
+
+        $updData = [
+            'parent_id' => isset($params['parent_id']) && ! empty($params['parent_id']) ? $params['parent_id'] : $dot['parent_id'],
+            'name' => isset($params['name']) && ! empty($params['name']) ? $params['name'] : $dot['name'],
+            'ip' => isset($params['ip']) ? ip2long($params['ip']) : $dot['ip'],
+            'city' => isset($params['city']) && ! empty($params['city']) ? $params['city'] : $dot['city'],
+            'county' => isset($params['county']) && ! empty($params['county']) ? $params['county'] : $dot['county'],
+            'district' => isset($params['district']) && ! empty($params['district']) ? $params['district'] : $dot['district'],
+            'updated_by' => $user['id'],
+        ];
+
+        if ($this->cluster->validate($updData) !== false) {
+            $result = Cluster::where('id', $id)->update($updData);
+            if ($result !== false) {
+                $data['data'] = $id;
+                return ['status' => true, 'data' => $data];
+            } else {
+                return ['status' => false, 'error' => '网点更新失败'];
+            }
+        } else {
+            return ['status' => false, 'error' => $this->cluster->getErrors()];
+        }
+    }
+
+    /**
+     * 删除中心
+     *
+     * @param $id
+     * @return array
+     */
+    public function deleteDot($id)
+    {
+        if (intval($id) <= 0)
+            return ['status' => false, 'error' => '参数错误'];
+
+        //判断网点是否存在
+        $dotId = Cluster::where(['id' => $id])->value('id');
+        if ($dotId == false || $dotId != $id)
+            return ['status' => false, 'error' => '网点不存在'];
+
+        //判断网点下面是否有机柜
+        if (Cabinet::where(['cluster_id' => $id])->value('id') != false)
+            return ['status' => false, 'error' => '网点下有机柜'];
+
+        $result = Cluster::where('id', $id)->delete();
+        if ($result !== false) {
+            $data['data'] = '网点删除成功';
+            return ['status' => true, 'data' => $data];
+        } else {
+            return ['status' => false, 'error' => '网点删除失败'];
+        }
+    }
 }

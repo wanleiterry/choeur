@@ -52,38 +52,38 @@ class DotController extends Controller
         }
     }
 
-//    /**
-//     * 更新网点
-//     *
-//     * @param $id
-//     * @param Request $request
-//     * @return \Illuminate\Http\JsonResponse
-//     */
-//    public function updateDot($id, Request $request)
-//    {
-//        $data = $this->dotService->updateDot($id, $request->all());
-//
-//        if ($data['status'] !== false) {
-//            return response()->json(['status' => true, 'data' => $data['data']]);
-//        } else {
-//            return response()->json(['status' => false, 'error' => $data['error']]);
-//        }
-//    }
-//
-//    /**
-//     * 删除网点
-//     *
-//     * @param $id
-//     * @return \Illuminate\Http\JsonResponse
-//     */
-//    public function deleteDot($id)
-//    {
-//        $data = $this->dotService->deleteDot($id);
-//
-//        if ($data['status'] !== false) {
-//            return response()->json(['status' => true, 'data' => $data['data']]);
-//        } else {
-//            return response()->json(['status' => false, 'error' => $data['error']]);
-//        }
-//    }
+    /**
+     * 更新网点
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateDot($id, Request $request)
+    {
+        $data = $this->dotService->updateDot($id, $request->all());
+
+        if ($data['status'] !== false) {
+            return response()->json(['status' => true, 'data' => $data['data']]);
+        } else {
+            return response()->json(['status' => false, 'error' => $data['error']]);
+        }
+    }
+
+    /**
+     * 删除网点
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteDot($id)
+    {
+        $data = $this->dotService->deleteDot($id);
+
+        if ($data['status'] !== false) {
+            return response()->json(['status' => true, 'data' => $data['data']]);
+        } else {
+            return response()->json(['status' => false, 'error' => $data['error']]);
+        }
+    }
 }

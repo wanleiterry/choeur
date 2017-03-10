@@ -37,5 +37,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('cluster/dot/{clusterId}.json', 'Room\DotController@getDotList')->where('clusterId', '[0-9]+');
         Route::get('dot/{dotId}.json', 'Room\DotController@getDot')->where('dotId', '[0-9]+');
         Route::post('dot.json', 'Room\DotController@createDot');
+        Route::put('dot/{dotId}.json', 'Room\DotController@updateDot')->where('dotId', '[0-9]+');
+        Route::delete('dot/{dotId}.json', 'Room\DotController@deleteDot')->where('dotId', '[0-9]+');
     });
 });
