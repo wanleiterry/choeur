@@ -164,7 +164,8 @@ class DotService extends BaseService
             return ['status' => false, 'error' => '参数错误'];
 
         //判断中心是否存在
-        if (isset($params['parent_id']) && Cluster::where(['id' => $params['parent_id'], 'parent_id' => 0]))
+        if (isset($params['parent_id']) &&
+            Cluster::where(['id' => $params['parent_id'], 'parent_id' => 0])->value('id') != false)
             return ['status' => false, 'error' => '中心不存在'];
 
         //判断网点是否存在
@@ -173,12 +174,6 @@ class DotService extends BaseService
             return ['status' => false, 'error' => '网点不存在'];
 
         $dot = $dot->toArray();
-
-        //判断是否重名
-        if (isset($params['name']) && $params['name'] != $dot['name']) {
-            if (Cluster::where('name', $params['name'])->value('id') != false)
-                return ['status' => false, 'error' => '网点名已存在'];
-        }
 
         //参数整理
         $user = $this->getAuthUser();
@@ -196,6 +191,12 @@ class DotService extends BaseService
         ];
 
         if ($this->cluster->validate($updData) !== false) {
+            //判断是否重名
+            if ($params['name'] != $dot['name']) {
+                if (Cluster::where('name', $params['name'])->value('id') != false)
+                    return ['status' => false, 'error' => '网点名已存在'];
+            }
+
             $result = Cluster::where('id', $id)->update($updData);
             if ($result !== false) {
                 $data['data'] = $id;

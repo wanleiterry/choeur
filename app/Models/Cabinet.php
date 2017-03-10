@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Cabinet extends Model
+class Cabinet extends BaseModel
 {
     protected $table = 'cabinet';
 
@@ -12,5 +10,19 @@ class Cabinet extends Model
 
     public $timestamps = true;
 
-    protected $dateFormat = 'U';
+    protected $rules = [
+        'dot_id' => 'required|min:0|integer',
+        'name' => 'required|max:60',
+        'ip' => 'required',
+    ];
+
+    public function dot()
+    {
+        return $this->belongsTo('App\Models\Cluster', 'dot_id', 'id');
+    }
+
+    public function equipment()
+    {
+        return $this->hasMany('App\Models\Equipment', 'cabinet_id', 'id');
+    }
 }

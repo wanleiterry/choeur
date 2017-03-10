@@ -39,5 +39,12 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('dot.json', 'Room\DotController@createDot');
         Route::put('dot/{dotId}.json', 'Room\DotController@updateDot')->where('dotId', '[0-9]+');
         Route::delete('dot/{dotId}.json', 'Room\DotController@deleteDot')->where('dotId', '[0-9]+');
+
+        //机柜
+        Route::get('dot/cabinet/{dotId}.json', 'Room\CabinetController@getCabinetList')->where('dotId', '[0-9]+');
+        Route::get('cabinet/{cabinetId}.json', 'Room\CabinetController@getCabinet')->where('cabinetId', '[0-9]+');
+        Route::post('cabinet.json', 'Room\CabinetController@createCabinet');
+        Route::put('cabinet/{cabinetId}.json', 'Room\CabinetController@updateCabinet')->where('cabinetId', '[0-9]+');
+        Route::delete('cabinet/{cabinetId}.json', 'Room\CabinetController@deleteCabinet')->where('cabinetId', '[0-9]+');
     });
 });

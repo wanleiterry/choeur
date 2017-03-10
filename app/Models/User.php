@@ -13,6 +13,4 @@ class User extends Authenticatable
     protected $hidden = ['password'];
 
     public $timestamps = true;
-
-    protected $dateFormat = 'U';
 }

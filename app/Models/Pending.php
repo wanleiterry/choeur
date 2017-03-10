@@ -2,15 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Pending extends Model
+class Pending extends BaseModel
 {
     protected $table = 'pending';
 
     protected $guarded = ['id'];
 
     public $timestamps = true;
-
-    protected $dateFormat = 'U';
 }

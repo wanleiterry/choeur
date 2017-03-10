@@ -14,8 +14,10 @@ class DotController extends Controller
     }
 
     /**
-     * 获取网点列表
+     * 获取中心下的网点列表
      *
+     * @param $clusterId
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getDotList($clusterId, Request $request)
@@ -27,6 +29,7 @@ class DotController extends Controller
     /**
      * 获取网点
      *
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function getDot($id)
