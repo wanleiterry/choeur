@@ -64,6 +64,10 @@ class DotService extends BaseService
         else
             $dots = $dots->toArray();
 
+        foreach ($dots as &$dot) {
+            $dot['ip'] = ! empty($dot['ip']) ? long2ip($dot['ip']) : '';
+        }
+
         $data['data'] = $dots;
 
         return $data;
@@ -100,7 +104,7 @@ class DotService extends BaseService
     }
 
     /**
-     * 创建中心
+     * 创建网点
      *
      * @param array $params
      * @return array
@@ -142,14 +146,14 @@ class DotService extends BaseService
             if ($result !== false)
                 return ['status' => true, 'data' => $result['id']];
             else
-                return ['status' => false, 'error' => '中心创建失败'];
+                return ['status' => false, 'error' => '网点创建失败'];
         } else {
             return ['status' => false, 'error' => $this->cluster->getErrors()];
         }
     }
 
     /**
-     * 更新中心
+     * 更新网点
      *
      * @param $id
      * @param array $params
@@ -162,11 +166,6 @@ class DotService extends BaseService
 
         if (isset($params['ip']) && chkIpV4($params['ip']) == false)
             return ['status' => false, 'error' => '参数错误'];
-
-        //判断中心是否存在
-        if (isset($params['parent_id']) &&
-            Cluster::where(['id' => $params['parent_id'], 'parent_id' => 0])->value('id') != false)
-            return ['status' => false, 'error' => '中心不存在'];
 
         //判断网点是否存在
         $dot = Cluster::where(['id' => $id])->first();
@@ -191,8 +190,13 @@ class DotService extends BaseService
         ];
 
         if ($this->cluster->validate($updData) !== false) {
+            //判断中心是否存在
+            if ($updData['parent_id'] != $dot['parent_id'] &&
+                Cluster::where(['id' => $updData['parent_id'], 'parent_id' => 0])->value('id') == false)
+                return ['status' => false, 'error' => '中心不存在'];
+
             //判断是否重名
-            if ($params['name'] != $dot['name']) {
+            if ($updData['name'] != $dot['name']) {
                 if (Cluster::where('name', $params['name'])->value('id') != false)
                     return ['status' => false, 'error' => '网点名已存在'];
             }
@@ -210,7 +214,7 @@ class DotService extends BaseService
     }
 
     /**
-     * 删除中心
+     * 删除网点
      *
      * @param $id
      * @return array

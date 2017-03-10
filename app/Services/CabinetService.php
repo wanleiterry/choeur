@@ -46,23 +46,27 @@ class CabinetService extends BaseService
             return $data;
         }
 
-        $dots = $cabinetQuery->select('id', 'name', 'ip', 'created_at')
+        $cabinets = $cabinetQuery->select('id', 'name', 'ip', 'created_at')
             ->skip($offset)
             ->take($limit)
             ->get();
 
-        if ($dots == false)
-            $dots = [];
+        if ($cabinets == false)
+            $cabinets = [];
         else
-            $dots = $dots->toArray();
+            $cabinets = $cabinets->toArray();
 
-        $data['data'] = $dots;
+        foreach ($cabinets as &$cabinet) {
+            $cabinet['ip'] = ! empty($cabinet['ip']) ? long2ip($cabinet['ip']) : '';
+        }
+
+        $data['data'] = $cabinets;
 
         return $data;
     }
 
     /**
-     * 获取网点信息
+     * 获取机柜信息
      *
      * @param $id
      * @return array
@@ -123,7 +127,7 @@ class CabinetService extends BaseService
         //创建
         if ($this->cabinet->validate($insData) !== false) {
             if (Cabinet::where(['name' => $params['name']])->value('id') != false)
-                return ['status' => false, 'error' => '网点名称已存在'];
+                return ['status' => false, 'error' => '机柜名称已存在'];
 
             $result = Cabinet::create($insData);
 
@@ -151,23 +155,12 @@ class CabinetService extends BaseService
         if (isset($params['ip']) && chkIpV4($params['ip']) == false)
             return ['status' => false, 'error' => '参数错误'];
 
-        //判断网点是否存在
-        if (isset($params['dot_id']) &&
-            Cluster::where('id', $params['dot_id'])->where('parent_id', '>', 0) != false)
-            return ['status' => false, 'error' => '网点不存在'];
-
         //判断机柜是否存在
         $cabinet = Cabinet::where(['id' => $id])->first();
         if ($cabinet == false)
             return ['status' => false, 'error' => '机柜不存在'];
 
         $cabinet = $cabinet->toArray();
-
-        //判断是否重名
-        if (isset($params['name']) && $params['name'] != $cabinet['name']) {
-            if (Cabinet::where('name', $params['name'])->value('id') != false)
-                return ['status' => false, 'error' => '机柜名已存在'];
-        }
 
         //参数整理
         $user = $this->getAuthUser();
@@ -181,13 +174,26 @@ class CabinetService extends BaseService
             'updated_by' => $user['id'],
         ];
 
+        //验证
         if ($this->cabinet->validate($updData) !== false) {
+            //判断网点是否存在
+            if (isset($updData['dot_id']) != $cabinet['dot_id'] &&
+                Cluster::where('id', $updData['dot_id'])->where('parent_id', '>', 0) == false)
+                return ['status' => false, 'error' => '网点不存在'];
+
+            //判断是否重名
+            if ($updData['name'] != $cabinet['name']) {
+                if (Cabinet::where('name', $updData['name'])->value('id') != false)
+                    return ['status' => false, 'error' => '机柜名已存在'];
+            }
+
+            //更新
             $result = Cabinet::where('id', $id)->update($updData);
             if ($result !== false) {
                 $data['data'] = $id;
                 return ['status' => true, 'data' => $data];
             } else {
-                return ['status' => false, 'error' => '网点更新失败'];
+                return ['status' => false, 'error' => '机柜更新失败'];
             }
         } else {
             return ['status' => false, 'error' => $this->cabinet->getErrors()];

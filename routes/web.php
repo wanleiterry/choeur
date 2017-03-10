@@ -46,5 +46,12 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('cabinet.json', 'Room\CabinetController@createCabinet');
         Route::put('cabinet/{cabinetId}.json', 'Room\CabinetController@updateCabinet')->where('cabinetId', '[0-9]+');
         Route::delete('cabinet/{cabinetId}.json', 'Room\CabinetController@deleteCabinet')->where('cabinetId', '[0-9]+');
+
+        //设备
+        Route::get('cabinet/equipment/{cabinetId}.json', 'Room\EquipmentController@getEquipmentList')->where('cabinetId', '[0-9]+');
+        Route::get('equipment/{equipmentId}.json', 'Room\EquipmentController@getEquipment')->where('equipmentId', '[0-9]+');
+        Route::post('equipment.json', 'Room\EquipmentController@createEquipment');
+        Route::put('equipment/{equipmentId}.json', 'Room\EquipmentController@updateEquipment')->where('equipmentId', '[0-9]+');
+        Route::delete('equipment/{equipmentId}.json', 'Room\EquipmentController@deleteEquipment')->where('equipmentId', '[0-9]+');
     });
 });
