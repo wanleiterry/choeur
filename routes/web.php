@@ -20,8 +20,11 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('login.json', 'Auth\LoginController@postLogin');
 
     //用户相关
-    Route::group(['prefix' => 'user', 'middleware' => ['jwt.auth', 'jwt.refresh']], function () {
+//    Route::group(['prefix' => 'user', 'middleware' => ['jwt.auth', 'jwt.refresh']], function () {
+    Route::group(['prefix' => 'user', 'middleware' => ['jwt.auth']], function () {
         Route::get('list.json', 'User\UserController@getUserList');
+        Route::get('info/{userId}.json', 'User\UserController@getUser')->where('userId', '[0-9]+');
+        Route::post('doAdd.json', 'User\UserController@createUser');
     });
 
     //机房相关

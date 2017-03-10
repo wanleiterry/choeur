@@ -11,7 +11,7 @@ class Cabinet extends BaseModel
     public $timestamps = true;
 
     protected $rules = [
-        'dot_id' => 'required|min:0|integer',
+        'dot_id' => 'required|min:1|integer',
         'name' => 'required|max:60',
         'ip' => 'required',
     ];

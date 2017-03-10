@@ -2,15 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class User extends Authenticatable
+class Role extends BaseModel
 {
-    protected $table = 'user';
+    protected $table = 'role';
 
     protected $guarded = ['id'];
-
-    protected $hidden = ['password'];
 
     public $timestamps = true;
 

@@ -15,7 +15,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * 获取中心下的网点列表
+     * 获取机柜下的设备列表
      *
      * @param $clusterId
      * @param Request $request
@@ -28,7 +28,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * 获取网点
+     * 获取设备信息
      *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
@@ -57,7 +57,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * 更新网点
+     * 更新设备信息
      *
      * @param $id
      * @param Request $request
@@ -75,7 +75,7 @@ class EquipmentController extends Controller
     }
 
     /**
-     * 删除网点
+     * 删除设备
      *
      * @param $id
      * @return \Illuminate\Http\JsonResponse

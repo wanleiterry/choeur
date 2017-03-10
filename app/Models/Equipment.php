@@ -11,7 +11,7 @@ class Equipment extends BaseModel
     public $timestamps = true;
 
     protected $rules = [
-        'cabinet_id' => 'required|min:0|integer',
+        'cabinet_id' => 'required|min:1|integer',
         'name' => 'required|max:60',
         'ip' => 'required',
     ];
