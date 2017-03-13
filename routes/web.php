@@ -25,6 +25,9 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('list.json', 'User\UserController@getUserList');
         Route::get('info/{userId}.json', 'User\UserController@getUser')->where('userId', '[0-9]+');
         Route::post('doAdd.json', 'User\UserController@createUser');
+        Route::put('doEdit/{userId}.json', 'User\UserController@updateUser')->where('userId', '[0-9]+');
+        Route::put('doPassword/{userId}.json', 'User\UserController@updatePassword')->where('userId', '[0-9]+');
+        Route::delete('doDelete/{userId}.json', 'User\UserController@deleteUser')->where('userId', '[0-9]+');
     });
 
     //机房相关

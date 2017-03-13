@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Services\UserService;
-use App\Http\Requests\User\StoreUserRequest;
 
 class UserController extends Controller
 {
@@ -45,9 +44,62 @@ class UserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function createUser(StoreUserRequest $request)
-    {echo 123;exit;
+    public function createUser(Request $request)
+    {
         $data = $this->userService->createUser($request->all());
+
+        if ($data['status'] !== false) {
+            return response()->json(['status' => true, 'data' => $data['data']]);
+        } else {
+            return response()->json(['status' => false, 'error' => $data['error']]);
+        }
+    }
+
+    /**
+     * 编辑用户
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateUser($id, Request $request)
+    {
+        $data = $this->userService->updateUser($id, $request->all());
+
+        if ($data['status'] !== false) {
+            return response()->json(['status' => true, 'data' => $data['data']]);
+        } else {
+            return response()->json(['status' => false, 'error' => $data['error']]);
+        }
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePassword($id, Request $request)
+    {
+        $data = $this->userService->updatePassword($id, $request->all());
+
+        if ($data['status'] !== false) {
+            return response()->json(['status' => true, 'data' => $data['data']]);
+        } else {
+            return response()->json(['status' => false, 'error' => $data['error']]);
+        }
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteUser($id)
+    {
+        $data = $this->userService->deleteUser($id);
 
         if ($data['status'] !== false) {
             return response()->json(['status' => true, 'data' => $data['data']]);
