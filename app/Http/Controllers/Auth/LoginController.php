@@ -23,13 +23,12 @@ class LoginController extends Controller
     /**
      * 用户登录：账号（邮箱/手机）/密码
      *
-     * @param  
-     * @return 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function postLogin(Request $request)
     {
         $params = $request->only('account', 'password');
-        $password = $request->get('password', '');
         if (empty($params['account']) || empty($params['password'])) {
             return response()->json(['status' => false, 'error' => '账号或密码不能为空。']);
         }
@@ -45,8 +44,9 @@ class LoginController extends Controller
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['status' => false, 'error' => '邮箱或密码错误。']);
         }
-        // TODO: cookie记录登录的ip，如ip不同需重新登录
-        Redis::set('user:' . $params['account'] . ':ip', request()->ip());
+        //redis记录登录的ip，如ip不同需重新登录
+        $user = JWTAuth::toUser($token);
+        Redis::set('user:' . $user['id'] . ':ip', request()->ip());
 
         // send the refreshed token back to the client
         // $response->headers->set('Authorization', 'Bearer ' . $newToken);

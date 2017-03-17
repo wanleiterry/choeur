@@ -25,7 +25,7 @@ class UserService extends BaseService
         $offset = isset($params['offset']) ? $params['offset'] : OFFSET;
         $limit = isset($params['limit']) ? $params['limit'] : LIMIT;
 
-        $userQuery = User::select('id', 'username', 'mobile', 'email', 'qq', 'sex', 'status');
+        $userQuery = User::select('id', 'username', 'mobile', 'email', 'sex', 'status');
 
         if (isset($params['username']) && ! empty($params['username']))
             $userQuery->where('username', 'like', '%' . $params['username'] . '%');
@@ -79,7 +79,7 @@ class UserService extends BaseService
     {
         $data = [];
 
-        $user = User::select('id', 'role_id', 'username', 'mobile', 'email', 'qq', 'sex', 'address', 'status', 'avatar', 'created_at')
+        $user = User::select('id', 'role_id', 'username', 'mobile', 'email', 'sex', 'address', 'status', 'avatar', 'created_at')
             ->where('id', $id)
             ->with(['role' => function ($q) {
                 $q->select('id', 'name');

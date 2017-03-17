@@ -24,7 +24,7 @@ class JwtRefreshToken
         } catch (TokenExpiredException $e) {
             return response()->json(['status' => false, 'error' => 'Token已过期']);
         } catch (JWTException $e) {
-            return response()->json(['status' => false, 'error' => 'Token无效']);
+            return response()->json(['status' => false, 'error' => 'Refresh Token无效']);
         }
 
         // send the refreshed token back to the client

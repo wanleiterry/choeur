@@ -15,13 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test', function () {
+    return json_encode(['test' => 123]);
+})->name('test');
+
 Route::group(['prefix' => 'api'], function () {
     //登录相关
     Route::post('login.json', 'Auth\LoginController@postLogin');
 
     //用户相关
-//    Route::group(['prefix' => 'user', 'middleware' => ['jwt.auth', 'jwt.refresh']], function () {
-    Route::group(['prefix' => 'user', 'middleware' => ['jwt.auth']], function () {
+    Route::group(['prefix' => 'user', 'middleware' => ['jwt.auth', 'jwt.response']], function () {
         Route::get('list.json', 'User\UserController@getUserList');
         Route::get('info/{userId}.json', 'User\UserController@getUser')->where('userId', '[0-9]+');
         Route::post('doAdd.json', 'User\UserController@createUser');
@@ -31,8 +34,7 @@ Route::group(['prefix' => 'api'], function () {
     });
 
     //机房相关
-//    Route::group(['prefix' => 'room', 'middleware' => ['jwt.auth', 'jwt.refresh']], function () {
-    Route::group(['prefix' => 'room', 'middleware' => ['jwt.auth']], function () {
+    Route::group(['prefix' => 'room', 'middleware' => ['jwt.auth', 'jwt.response']], function () {
         //中心
         Route::get('cluster.json', 'Room\ClusterController@getCluster');
         Route::post('cluster.json', 'Room\ClusterController@createCluster');
