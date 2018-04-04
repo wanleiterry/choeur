@@ -25,7 +25,7 @@ class UserController extends Controller
      */
     public function getUserList(Request $request)
     {
-        echo 'dev-7';
+        echo 'master';
         $data = $this->userService->getUserList($request->all());
         return response()->json(['status' => true, 'data' => $data['data']]);
     }
