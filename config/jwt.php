@@ -13,7 +13,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | JWT Authentication Secret
+    | JWT Authentication Secret（进行加密算法时的secret）
     |--------------------------------------------------------------------------
     |
     | Don't forget to set this, as it will be used to sign your tokens.
@@ -25,7 +25,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | JWT time to live
+    | JWT time to live（token的有效期，单位：分钟）
     |--------------------------------------------------------------------------
     |
     | Specify the length of time (in minutes) that the token will be valid for.
@@ -37,7 +37,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Refresh time to live
+    | Refresh time to live（可刷新token的有效期，单位：分钟）
     |--------------------------------------------------------------------------
     |
     | Specify the length of time (in minutes) that the token can be refreshed
@@ -51,7 +51,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | JWT hashing algorithm
+    | JWT hashing algorithm（token的签名算法）
     |--------------------------------------------------------------------------
     |
     | Specify the hashing algorithm that will be used to sign the token.
@@ -65,7 +65,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Model namespace
+    | User Model namespace（指向User模型的命名空间）
     |--------------------------------------------------------------------------
     |
     | Specify the full namespace to your User model.
@@ -77,7 +77,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User identifier
+    | User identifier（用于从token的sub中获取用户）
     |--------------------------------------------------------------------------
     |
     | Specify a unique property of the user that will be added as the 'sub'
@@ -89,7 +89,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Required Claims
+    | Required Claims（在token的payload中必填的选项，否则会抛TokenInvalidException异常）
     |--------------------------------------------------------------------------
     |
     | Specify the required claims that must exist in any token.
@@ -102,7 +102,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Blacklist Enabled
+    | Blacklist Enabled（如果该选项为false，则将不能废弃token，即使刷新了token，前一个仍然有效）
     |--------------------------------------------------------------------------
     |
     | In order to invalidate tokens, you must have the the blacklist enabled.
@@ -114,7 +114,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Providers
+    | Providers（完成各种任务的具体实现）
     |--------------------------------------------------------------------------
     |
     | Specify the various providers used throughout the package.

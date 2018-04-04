@@ -19,6 +19,9 @@ Route::get('/test', function () {
     return json_encode(['test' => 123]);
 })->name('test');
 
+Route::get('/test/email/send.json', 'Test\TestJobsController@sendEmail');
+Route::get('/test/short-message/send.json', 'Test\TestJobsController@sendShortMessage');
+
 Route::group(['prefix' => 'api'], function () {
     //登录相关
     Route::post('login.json', 'Auth\LoginController@postLogin');
@@ -63,3 +66,12 @@ Route::group(['prefix' => 'api'], function () {
         Route::delete('equipment/{equipmentId}.json', 'Room\EquipmentController@deleteEquipment')->where('equipmentId', '[0-9]+');
     });
 });
+
+//用户认证的路由
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
+
+Route::get('/sso/login', 'Sso\AuthController@index');
+Route::post('/sso/login', 'Sso\AuthController@login');
+Route::post('/sso/token', 'Sso\AuthController@token');

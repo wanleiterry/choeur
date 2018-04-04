@@ -37,3 +37,7 @@
 
 
 token的expire时间
+
+
+$request = Request::create('/test', 'GET');
+Response::dispatch($request)->getContent();
