@@ -54,5 +54,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'jwt.auth' => \App\Http\Middleware\JwtAuthFromToken::class,
         'jwt.response' => \App\Http\Middleware\JwtResponseToken::class,
+        'verifyJwtToken' => 'App\Http\Middleware\verifyJwtToken',
     ];
 }

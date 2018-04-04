@@ -20,3 +20,10 @@ use Illuminate\Http\Request;
 //登录
 // Route::get('login', 'Auth\LoginController@getLogin');
 // Route::post('login', 'Auth\LoginController@postLogin');
+
+Route::group(['prefix' => 'test'], function () {
+    Route::get('jwt', 'Test\TestController@jwt');
+});
+
+Route::get('/user/list', 'User\UserController@getUserList')->middleware('verifyJwtToken');
+//Route::post('/sso/api', 'Sso\AuthController@api');
